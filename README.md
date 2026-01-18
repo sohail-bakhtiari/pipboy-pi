@@ -1,133 +1,112 @@
+# Pip-Boy 3000 Mk IV (Raspberry Pi Edition)
 
-# PipBoy Pygame Project
+This is a customized fork of the `pipboy-pi` project, optimized for **Python 3.13**, **Raspberry Pi 3 B+**, and **5-inch HDMI LCDs**.
 
-[![Python Version](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+## 🛠 Features & Fixes in this Fork
 
-> A Pip-Boy inspired application built with Python and Pygame-ce
-
----
-
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Screenshots](#screenshots)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+* **Python 3.13 Compatibility:** Fixed float-to-integer rendering errors and modern `pygame-ce` integration.
+* **Modernized C++ Module:** Updated `CMakeLists` and build paths for `pybind11` on newer OS versions.
+* **EGL/KMS Integration:** Pre-configured for `kmsdrm` video drivers to run directly from the CLI (no desktop required).
+* **Vault Boy Alignment:** Corrected 3D wireframe offsets for better visual fidelity.
+* **Auto-Boot Ready:** Includes systemd service configurations for a dedicated prop experience.
 
 ---
 
-## Introduction
+## 🚀 Installation
 
-The **PipBoy Pygame Project** is an interactive application inspired by the iconic Pip-Boy interface from the *Fallout* series. Built using [Pygame-ce](https://github.com/pygame-community/pygame-ce), this project simulates various aspects of the Pip-Boy interface, including interactive menus, inventory displays, and dynamic UI elements. It is designed both as a fun project and as a learning tool for Python game development.
+### 1. Prerequisites
 
-I have used the great pipboy project from [Zapwizard](https://github.com/zapwizard/pypboy), but this entire project is built from the ground up.
+```bash
+sudo apt update
+sudo apt install cmake libgbm1 libdrm-dev libgbm-dev xinit -y
 
----
+```
 
-## Features
+### 2. Environment Setup
 
-- **Retro UI Design:** Inspired by the classic Pip-Boy interface with a modern twist.
-- **Interactive Menus:** Navigate through different screens such as inventory, stats, and map.
-- **Customizable Modules:** Easily add or modify modules (e.g., radio, stats, inventory) to suit your needs.
+```bash
+git clone https://github.com/YOUR_USERNAME/pipboy-pi.git
+cd pipboy-pi
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 
----
+```
 
-## Installation
+### 3. Compiling the Wireframe Module
 
-### Prerequisites
+The 3D Vault Boy requires the C++ extension to be compiled locally:
 
-- **Python 3.12 or later:** [Download Python](https://www.python.org/downloads/)
-- **Pygame:** This project uses Pygame-ce for its graphical interface.
-- **Optional: Pip** to install dependencies from `requirements.txt`.
+```bash
+cd modules/cpp
+mkdir build && cd build
+cmake ..
+make
+cp wireframe*.so ..
 
-### Steps
-
-It is recommended to first run the project on your windows machine to ensure everything works as expected. Here are the steps to get started:
-
-1. **Clone the Repository:**
-
-   ```bash
-   git clone https://github.com/kelmes1/pipboy-pi.git
-   cd pipboy-pi
-   ```
-
-2. **Install Dependencies:**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run the Application:**
-
-   ```bash
-   python modules/main.py
-   ```
+```
 
 ---
 
-## Usage
+## 📺 Hardware Configuration (5" HDMI LCD)
 
-Once you have installed all the prerequisites and dependencies, running the project is straightforward. Here are some usage tips:
+To fix "EGL Not Initialized" or "Pageflip" errors on Pi 3 B+, use these settings in `/boot/firmware/config.txt`:
 
-- **Navigation:** Use your keyboard (or mapped controller keys) to navigate through the Pip-Boy interface.
-- **Modules:** Switch between different modules like Inventory, Stats, or Map using the on-screen prompts.
-- **Customization:** Modify the settings with `configure.py` to change UI themes, key bindings, or module behavior.
+```text
+# Use Fake KMS for better compatibility with Pygame-ce
+dtoverlay=vc4-fkms-v3d
+# Increase GPU memory for wireframe rendering
+gpu_mem=256
+# Physical shutdown button (GPIO 3 to GND)
+dtoverlay=gpio-shutdown,gpio_pin=3,active_low=1,pullup=on
 
----
-
-## Screenshots
-
-Here are some snapshots of the project in action:
-
-![Main Interface](documentation/screenshots/stat_screen.png)
-
-*The main Pip-Boy interface with navigation options.*
-
-
-![Inventory Screen](documentation/screenshots/inventory.png)
-
-*Example of the interactive inventory module.*
+```
 
 ---
 
-## Contributing
+## 🏃 Running the Pip-Boy
 
-Contributions are welcome! If you'd like to contribute to the project, please follow these guidelines:
+### Manual Start:
 
-1. **Fork the Repository:** Click on the "Fork" button on GitHub to create your own copy.
-2. **Create a Branch:** Develop your features or bug fixes on a separate branch.
-  
-   ```bash
-   git checkout -b feature/my-new-feature
-   ```
+```bash
+source venv/bin/activate
+export SDL_VIDEODRIVER=kmsdrm
+export SDL_VIDEOSYNC=0
+python modules/main.py
 
-3. **Commit Changes:** Write clear, concise commit messages.
-4. **Push Your Branch:**
+```
 
-   ```bash
-   git push origin feature/my-new-feature
-   ```
+### Automatic Start (on Boot):
 
-5. **Submit a Pull Request:** Open a pull request with a description of your changes and the problem it solves.
+1. Copy the provided `pipboy.service` to `/etc/systemd/system/`.
+2. Enable the service:
 
-For major changes, please open an issue first to discuss what you would like to change.
+```bash
+sudo systemctl enable pipboy.service
+sudo systemctl start pipboy.service
 
----
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+```
 
 ---
 
-## Contact
+## 🕹 Controls & Calibration
 
-For any questions, suggestions, or bug reports, feel free to reach out:
+* **Navigation:** Use [Arrow Keys] or [WASD] to switch tabs.
+* **Resolution:** Default is optimized for **800x480**. Adjust in `modules/settings.py` if using a different screen.
 
-- **GitHub Issues:** Use the [Issues](https://github.com/kelmes1/pipboy-pi/issues) page to report bugs or request features.
-- **Email:** [kelmesart@gmail.com](mailto:kelmesart@gmail.com)
+---
+
+### How to use this:
+
+1. Create a new file in your project folder: `nano README.md`.
+2. Paste the text above.
+3. Replace `YOUR_USERNAME` with your actual GitHub handle.
+4. **Commit and push** it to your fork:
+```bash
+git add README.md
+git commit -m "Add detailed documentation for Pi 3 setup"
+git push origin main
+
+```
+
+
