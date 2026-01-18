@@ -55,10 +55,6 @@ cp wireframe*.so ..
 Edit `/boot/firmware/config.txt` (or `/boot/config.txt`) to ensure the GPU can handle the 3D wireframes and allow direct shutdown:
 
 ```text
-# Use Fake KMS for Pi 3 B+ compatibility
-dtoverlay=vc4-fkms-v3d
-gpu_mem=256
-
 # Physical shutdown/wake button (GPIO 3 to GND)
 dtoverlay=gpio-shutdown,gpio_pin=3,active_low=1,pullup=on
 
