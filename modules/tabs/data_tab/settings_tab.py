@@ -16,7 +16,7 @@ class SettingsTab:
         
         self.inv_font = pygame.font.Font(settings.ROBOTO_BOLD_PATH, 10)
         self.footer_font = tab_instance.footer_font
-        self.config_path = 'user_config.py'
+        self.config_path = 'modules/user_config.py'
         
         self._init_icons()
         self._load_settings()

@@ -7,7 +7,7 @@ import platform
 #######################################################
 # Load items from the items.ini file
 #######################################################
-loader = ItemLoader('items.ini')
+loader = ItemLoader('modules/items.ini')
 items = loader.load_items()
 
 # ==================================================
@@ -29,7 +29,7 @@ SUBTABS = {
 # General Settings
 # ------------------
 
-RASPI = False 
+RASPI = True
 SPEED = 1
 GAME_ACCURATE_MODE = False
 YEARS_ADDED = 263
@@ -37,8 +37,8 @@ YEARS_ADDED = 263
 # ------------------
 # Screen Settings
 # ------------------
-SCREEN_WIDTH = 320
-SCREEN_HEIGHT = 255
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 480
 FPS = 24
 FULLSCREEN = True if RASPI else False 
 BACKGROUND = (0, 0, 0)
@@ -91,7 +91,7 @@ LIST_TOP_MARGIN = 10
 # ------------------
 # Player Settings
 # ------------------
-PLAYER_NAME = "Kelmes"
+PLAYER_NAME = "BestPi"
 HP_MAX = 120
 HP_CURRENT = 100
 AP_MAX = 90
@@ -260,7 +260,7 @@ OSM_KEYS = (
 MAP_TILE_SIZE = 512
 
 
-if os.path.exists("user_config.py"):
+if os.path.exists("modules/user_config.py"):
     from user_config import *
     
 

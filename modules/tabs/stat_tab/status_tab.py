@@ -315,8 +315,8 @@ class StatusTab:
                 self.conditionboy_legs[self.conditionboy_index],
                 (x_offset_body, y_offset_body))
             
-            x_offset_head = self.conditionboy_head_offsets[self.conditionboy_index][0] + self.draw_space.centerx - self.conditionboy_head.width / 2 - self.extra_head_x
-            y_offset_head = self.conditionboy_head_offsets[self.conditionboy_index][1] + self.conditionboy_head.height
+            x_offset_head = self.conditionboy_head_offsets[self.conditionboy_index][0] + self.draw_space.centerx - self.conditionboy_head.width / 2 - self.extra_head_x + 5
+            y_offset_head = self.conditionboy_head_offsets[self.conditionboy_index][1] + self.conditionboy_head.height - 34
                         
             self.conditionboy_surface.blit(
                 self.conditionboy_head,
